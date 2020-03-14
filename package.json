@@ -1,0 +1,26 @@
+{
+  "name": "br.com.cultivohortalicas",
+  "version": "1.0.0",
+  "description": "App para monitoramento do cultivo das hortaliças.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AltieriR/cultivo-hortalicas.git"
+  },
+  "author": "AltieriR",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AltieriR/cultivo-hortalicas/issues"
+  },
+  "homepage": "https://github.com/AltieriR/cultivo-hortalicas#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.4",
+    "multer": "^1.4.2"
+  }
+}
