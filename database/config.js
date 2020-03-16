@@ -1,6 +1,10 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/cathesauth', { useNewUrlParser: true, useFindAndModify: false });
+const server = 'localhost:27017';
+const database = 'hidroponica';
+const options = { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true };
+
+mongoose.connect(`mongodb://${server}/${database}`, options);
 
 (function connectionStatus() {
     const connection = mongoose.connection.readyState;
