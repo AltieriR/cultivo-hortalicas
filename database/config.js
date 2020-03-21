@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const server = 'localhost:27017';
 const database = 'hidroponica';
-const options = { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true };
+const options = { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true };
 
 mongoose.connect(`mongodb://${server}/${database}`, options);
 

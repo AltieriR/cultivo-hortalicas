@@ -18,4 +18,12 @@ del = async (MongooseSchema, id) => {
   return MongooseSchema.findByIdAndDelete(id);
 }
 
-module.exports = { persist, findById, findAll, put, del };
+findBy = async (MongooseSchema, conditions) => {
+  return MongooseSchema.findOne(conditions);
+}
+
+findByWithProjection = async (MongooseSchema, conditions, projection) => {
+  return MongooseSchema.findOne(conditions).select(projection);
+}
+
+module.exports = { persist, findById, findAll, put, del, findBy, findByWithProjection };
