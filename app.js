@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
-const routing = require('./route/estufa.route');
+const routing = require('./route/routes');
 
 app.use(bodyParser.json());
 
