@@ -5,7 +5,7 @@ const server = `${process.env.DB_URL}'`;
 const database = 'hidroponica';
 const options = { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true };
 
-mongoose.connect(`mongodb://${server}/${database}`, options);
+mongoose.connect(server, options);
 
 (function connectionStatus() {
     const connection = mongoose.connection.readyState;
