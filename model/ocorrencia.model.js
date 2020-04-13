@@ -1,19 +1,20 @@
 const mongoose = require('../database/config');
 
-const AtuadorSchema = new mongoose.Schema({
-  identificador: {
-    type: String,
-    required: true
-  },
-  pino: {
+const OcorrenciaSchema = new mongoose.Schema({
+  causa: {
     type: String
   },
   estufa: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Estufa'
   },
-  descricao: {
-    type: String
+  sensor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Sensor'
+  },
+  quando: {
+    type: Date,
+    default: Date.now
   },
   criadoPor: {
     type: String,
@@ -33,6 +34,6 @@ const AtuadorSchema = new mongoose.Schema({
   },
 });
 
-const Atuador = mongoose.model('Atuador', AtuadorSchema);
+const Ocorrencia = mongoose.model('Ocorrencia', OcorrenciaSchema);
 
-module.exports = Atuador;
+module.exports = Ocorrencia;

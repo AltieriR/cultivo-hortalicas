@@ -26,4 +26,8 @@ findByWithProjection = async (MongooseSchema, conditions, projection) => {
   return MongooseSchema.findOne(conditions).select(projection);
 }
 
-module.exports = { persist, findById, findAll, put, del, findBy, findByWithProjection };
+findAllBy = async (MongooseSchema, conditions) => {
+  return MongooseSchema.find(conditions);
+}
+
+module.exports = { persist, findById, findAll, put, del, findBy, findByWithProjection, findAllBy };

@@ -23,6 +23,12 @@ const UsuarioSchema = new mongoose.Schema({
   fone: {
     type: String
   },
+  mostrarRelatorios: {
+    type: Boolean
+  },
+  mostrarRelatoriosEmTela: {
+    type: Boolean
+  },
   criadoPor: {
     type: String,
     required: true

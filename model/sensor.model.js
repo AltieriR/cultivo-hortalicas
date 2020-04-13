@@ -5,17 +5,35 @@ const SensorSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  pino: {
+    type: String
+  },
   grandeza: {
     type: String,
     required: true
   },
-  valor: {
+  valores: [{
+    type: String
+  }],
+  media: {
     type: String,
-    required: true
+    default: function() {
+      return this.valores.reduce((a, v) => Number(a) + Number(v), 0) / Number(this.valores.length);
+    }
+  },
+  ultimaMedia: {
+    type: String,
+    default: function() {
+      return this.valores.reduce((a, v, i) => i < 3 ? Number(a) + Number(v) : Number(a), 0) / Number(this.valores.length);
+    }
   },
   unidade: {
     type: String,
     required: true
+  },
+  estufa: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Estufa'
   },
   criadoPor: {
     type: String,

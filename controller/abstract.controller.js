@@ -58,4 +58,12 @@ login = async (middleware, model) => {
   });
 };
 
-module.exports = { create, read, readAll, update, remove, login };
+getByKey = async (middleware, model) => {
+  AbstractService.findAllBy(model, middleware.query).then((doc) => {
+    return middleware.res.status(200).send(doc);
+  }).catch(err => {
+    return middleware.res.status(500).send(err.message);
+  });
+};
+
+module.exports = { create, read, readAll, update, remove, login, getByKey };

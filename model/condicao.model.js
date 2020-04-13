@@ -9,9 +9,17 @@ const CondicaoSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  valor_experado: {
+  valor_esperado: {
     type: String,
     required: true
+  },
+  sensor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Sensor'
+  },
+  atuador: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Atuador'
   },
   criadoPor: {
     type: String,

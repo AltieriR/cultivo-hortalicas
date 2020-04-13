@@ -12,8 +12,7 @@ const EstufaSchema = new mongoose.Schema({
     type: String
   },
   campo: {
-    type: String,
-    required: true
+    type: String
   },
   criadoPor: {
     type: String,
