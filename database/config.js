@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-const server = 'localhost:27017';
+const server = `${process.env.DB_URL}:${process.env.DB_PORT}'`;
+
 const database = 'hidroponica';
 const options = { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true };
 

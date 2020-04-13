@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const cors = require('cors')
+const cors = require('cors');
+require('dotenv').config();
 
 const routing = require('./route/routes');
 
@@ -20,6 +21,6 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Internal error!');
 });
 
-app.listen(3000, () => {
-  console.log('Up and running');
+app.listen(process.env.PORT || 3001, () => {
+  console.log('Up and running into :' + process.env.PORT || 3001);
 });
