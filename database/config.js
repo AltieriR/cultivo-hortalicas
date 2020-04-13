@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const server = `${process.env.DB_URL}:${process.env.DB_PORT}'`;
+const server = `${process.env.DB_URL}'`;
 
 const database = 'hidroponica';
 const options = { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true };
