@@ -30,4 +30,8 @@ findAllBy = async (MongooseSchema, conditions) => {
   return MongooseSchema.find(conditions);
 }
 
-module.exports = { persist, findById, findAll, put, del, findBy, findByWithProjection, findAllBy };
+addData = async (MongooseSchema, obj) => {
+  return MongooseSchema.findByIdAndUpdate(obj._id, { $push: { valores: obj.valor } });
+}
+
+module.exports = { persist, findById, findAll, put, del, findBy, findByWithProjection, findAllBy, addData };

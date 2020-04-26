@@ -40,6 +40,17 @@ remove = async (middleware, model) => {
   });
 };
 
+addData = async (middleware, model) => {
+  const { valor } = middleware.body;
+  if (isNaN(valor)) return middleware.res.status(404).send(valor + ' is not a number!');
+  await AbstractService.addData(model, middleware.body).then((doc) => {
+    doc.valores.push(valor);
+    return middleware.res.status(200).send(doc);
+  }).catch(err => {
+    return middleware.res.status(500).send(err);
+  });
+};
+
 login = async (middleware, model) => {
   const { usuario, senha } = middleware.body;
   await AbstractService.findByWithProjection(model, { 'usuario': usuario }, 'usuario senha').then((doc) => {
@@ -53,7 +64,6 @@ login = async (middleware, model) => {
       return middleware.res.status(401);
     });
   }).catch(err => {
-    console.log(err.message);
     return middleware.res.sendStatus(404)
   });
 };
@@ -66,4 +76,4 @@ getByKey = async (middleware, model) => {
   });
 };
 
-module.exports = { create, read, readAll, update, remove, login, getByKey };
+module.exports = { create, read, readAll, update, remove, login, getByKey, addData };

@@ -28,6 +28,10 @@ remove = (middleware) => {
   AbstractController.remove(middleware, assignResource(middleware));
 }
 
+newInputData = (middleware) => {
+  AbstractController.addData(middleware, assignResource(middleware));
+}
+
 login = (middleware) => {
   AbstractController.login(middleware, require(`../model/usuario.model`));
 }
@@ -62,6 +66,7 @@ router.get('/sensor', readAll);
 router.post('/sensor', create);
 router.put('/sensor', update);
 router.delete('/sensor/:id', remove);
+router.post('/sensor/entrada', newInputData);
 
 router.get('/atuador?*', hasQueryParams, getByKey);
 router.get('/atuador/:id', read);
