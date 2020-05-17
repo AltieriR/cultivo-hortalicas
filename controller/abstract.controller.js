@@ -1,4 +1,6 @@
 const AbstractService = require('../service/abstract.service');
+const auth = require('../utils/jwt');
+const User = require('../model/usuario.model');
 
 create = async (middleware, model) => {
   AbstractService.persist(model, middleware.body).then((doc) => {
@@ -51,20 +53,73 @@ addData = async (middleware, model) => {
   });
 };
 
+register = async (middleware, model) => {
+  AbstractService.persist(model, middleware.body).then((doc) => {
+    const token = auth.sign({ user: middleware.body.email });
+    delete doc.senha;
+    return middleware.res.status(200).send({ result: doc, token: token });
+  }).catch(err => {
+    return middleware.res.status(500).send(err.message);
+  });
+}
+
 login = async (middleware, model) => {
-  const { usuario, senha } = middleware.body;
-  await AbstractService.findByWithProjection(model, { 'usuario': usuario }, 'usuario senha').then((doc) => {
+  const [, hash] = middleware.headers.authorization.split(' ');
+  const [email, senha] = Buffer.from(hash, 'base64').toString().split(':');
+
+  await AbstractService.findByWithProjection(model, { email: email }, 'email senha').then((doc) => {
     doc.comparePassword(senha, (err, isMatch) => {
       if (err) {
         return middleware.res.status(500).send(err.message);
       } else if (isMatch) {
+        const token = auth.sign({ user: email });
         delete doc.senha;
-        return middleware.res.status(200).send(doc);
+        return middleware.res.status(200).send({ result: doc, token: token });
       }
       return middleware.res.status(401);
     });
   }).catch(err => {
-    return middleware.res.sendStatus(404)
+    return middleware.res.status(500).send(err.message);
+  });
+};
+
+validateAuth = async (req, res, next) => {
+  if (await req.path.startsWith('/login') || await req.path.startsWith('/register')) {
+    return next();
+  }
+  if (!req.headers.authorization) return res.redirect(401, '/login')
+  const token = req.headers.authorization.split(' ')[1];
+  if (token) {
+    try {
+      const payload = auth.verify(token);
+      AbstractService.findOneBy(User, { email: payload.user }).then((doc) => {
+        if (doc) {
+          req.userLoggedIn = doc;
+          next();
+        } else {
+          return res.status(404).send('Invalid user details');
+        }
+      }).catch(() => {
+        return res.sendStatus(401);
+      });
+    } catch (err) {
+      return res.status(401).send(err.message);
+    }
+  } else {
+    return res.sendStatus(404);
+  }
+  return next();
+}
+
+getUserInfoByToken = async (middleware, model) => {
+  const token = middleware.headers.authorization.split(' ')[1];
+  const payload = auth.verify(token);
+  
+  AbstractService.findAllBy(model, { email: payload.user }).then((doc) => {
+    if (!doc[0]) throw Error('User not found');
+    return middleware.res.status(200).send(doc[0]);
+  }).catch(err => {
+    return middleware.res.status(500).send(err.message);
   });
 };
 
@@ -76,4 +131,4 @@ getByKey = async (middleware, model) => {
   });
 };
 
-module.exports = { create, read, readAll, update, remove, login, getByKey, addData };
+module.exports = { create, read, readAll, update, remove, addData, register, login, validateAuth, getUserInfoByToken, getByKey };

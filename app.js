@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
+const validateAuth = require('./controller/abstract.controller').validateAuth;
 
 const routing = require('./route/routes');
 
@@ -13,6 +14,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/images', express.static('images'));
+
+app.use(validateAuth);
 
 app.use(routing);
 

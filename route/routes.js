@@ -32,8 +32,16 @@ newInputData = (middleware) => {
   AbstractController.addData(middleware, assignResource(middleware));
 }
 
+register = (middleware) => {
+  AbstractController.register(middleware, require(`../model/usuario.model`));
+}
+
 login = (middleware) => {
   AbstractController.login(middleware, require(`../model/usuario.model`));
+}
+
+getUserInfoByToken = (middleware) => {
+  AbstractController.getUserInfoByToken(middleware, require(`../model/usuario.model`)); //middleware.headers, middleware.res
 }
 
 assignResource = (middleware) => {
@@ -85,10 +93,11 @@ router.delete('/condicao/:id', remove);
 router.get('/usuario?*', getByKey);
 router.get('/usuario/:id', read);
 router.get('/usuario', readAll);
-router.post('/usuario', create);
 router.put('/usuario', update);
 router.delete('/usuario/:id', remove);
-router.post('/login', login);
+router.post('/register', register);
+router.get('/login', login);
+router.get('/me', getUserInfoByToken);
 
 router.get('/ocorrencia?*', getByKey);
 router.get('/ocorrencia/:id', read);
