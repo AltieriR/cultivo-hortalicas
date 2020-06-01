@@ -29,6 +29,9 @@ const UsuarioSchema = new mongoose.Schema({
   mostrarRelatoriosEmTela: {
     type: Boolean
   },
+  isAdmin: {
+    type: Boolean
+  },
   criadoPor: {
     type: String,
     required: true

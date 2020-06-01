@@ -70,7 +70,7 @@ login = async (middleware, model) => {
   await AbstractService.findByWithProjection(model, { email: email }, 'email senha').then((doc) => {
     doc.comparePassword(senha, (err, isMatch) => {
       if (err) {
-        return middleware.res.status(500).send(err.message);
+        return middleware.res.status(401).send(err.message);
       } else if (isMatch) {
         const token = auth.sign({ user: email });
         delete doc.senha;
@@ -87,40 +87,43 @@ validateAuth = async (req, res, next) => {
   if (await req.path.startsWith('/login') || await req.path.startsWith('/register')) {
     return next();
   }
-  if (!req.headers.authorization) return res.redirect(401, '/login')
-  const token = req.headers.authorization.split(' ')[1];
+  if (!req.headers.authorization) return;
+  const token = await req.headers.authorization.split(' ')[1];
+  
   if (token) {
     try {
-      const payload = auth.verify(token);
-      AbstractService.findOneBy(User, { email: payload.user }).then((doc) => {
+      const payload = await auth.verify(token);
+      await AbstractService.findOneBy(User, { email: payload.user }).then((doc) => {
         if (doc) {
           req.userLoggedIn = doc;
           next();
         } else {
           return res.status(404).send('Invalid user details');
         }
-      }).catch(() => {
+      }).catch(() => {        
         return res.sendStatus(401);
       });
     } catch (err) {
       return res.status(401).send(err.message);
     }
-  } else {
+  } else {    
     return res.sendStatus(404);
   }
-  return next();
 }
 
 getUserInfoByToken = async (middleware, model) => {
   const token = middleware.headers.authorization.split(' ')[1];
-  const payload = auth.verify(token);
+  const payload = await auth.verify(token);
   
-  AbstractService.findAllBy(model, { email: payload.user }).then((doc) => {
+  await AbstractService.findAllBy(model, { email: payload.user }).then((doc) => {
+    console.log(doc);
     if (!doc[0]) throw Error('User not found');
     return middleware.res.status(200).send(doc[0]);
   }).catch(err => {
+    console.log(err.message);
     return middleware.res.status(500).send(err.message);
   });
+  
 };
 
 getByKey = async (middleware, model) => {

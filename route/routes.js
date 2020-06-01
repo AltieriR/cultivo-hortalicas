@@ -16,7 +16,7 @@ getByKey = (middleware) => {
   AbstractController.getByKey(middleware, assignResource(middleware));
 }
 
-readAll =  (middleware) => {
+readAll =  (middleware) => {  
   AbstractController.readAll(middleware, assignResource(middleware));
 }
 
@@ -40,8 +40,8 @@ login = (middleware) => {
   AbstractController.login(middleware, require(`../model/usuario.model`));
 }
 
-getUserInfoByToken = (middleware) => {
-  AbstractController.getUserInfoByToken(middleware, require(`../model/usuario.model`)); //middleware.headers, middleware.res
+getUserInfoByToken = (middleware) => {  
+  AbstractController.getUserInfoByToken(middleware, require(`../model/usuario.model`));
 }
 
 assignResource = (middleware) => {
