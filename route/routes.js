@@ -95,7 +95,7 @@ router.get('/usuario/:id', read);
 router.get('/usuario', readAll);
 router.put('/usuario', update);
 router.delete('/usuario/:id', remove);
-router.post('/register', register);
+router.post('/registrar', register);
 router.get('/login', login);
 router.get('/me', getUserInfoByToken);
 

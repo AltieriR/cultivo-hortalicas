@@ -54,7 +54,7 @@ addData = async (middleware, model) => {
 };
 
 register = async (middleware, model) => {
-  AbstractService.persist(model, middleware.body).then((doc) => {
+  await AbstractService.persist(model, middleware.body).then((doc) => {    
     const token = auth.sign({ user: middleware.body.email });
     delete doc.senha;
     return middleware.res.status(200).send({ result: doc, token: token });
@@ -83,8 +83,8 @@ login = async (middleware, model) => {
   });
 };
 
-validateAuth = async (req, res, next) => {
-  if (await req.path.startsWith('/login') || await req.path.startsWith('/register')) {
+validateAuth = async (req, res, next) => {  
+  if (await req.path.startsWith('/login') || await req.path.startsWith('/registrar')) {
     return next();
   }
   if (!req.headers.authorization) return;
@@ -116,7 +116,6 @@ getUserInfoByToken = async (middleware, model) => {
   const payload = await auth.verify(token);
   
   await AbstractService.findAllBy(model, { email: payload.user }).then((doc) => {
-    console.log(doc);
     if (!doc[0]) throw Error('User not found');
     return middleware.res.status(200).send(doc[0]);
   }).catch(err => {
