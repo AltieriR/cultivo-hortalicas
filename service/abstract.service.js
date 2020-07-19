@@ -38,4 +38,8 @@ addData = async (MongooseSchema, obj) => {
   return MongooseSchema.findByIdAndUpdate(obj._id, { $push: { valores: obj.valor } });
 }
 
-module.exports = { persist, findById, findAll, put, del, findBy, findByWithProjection, findAllBy, findOneBy, addData };
+findDataBetweenDates = async (MongooseSchema, inicio, fim) => {
+  return MongooseSchema.find({'data': {'$gte': new Date(inicio), '$lte': new Date(fim)}});
+}
+
+module.exports = { persist, findById, findAll, put, del, findBy, findByWithProjection, findAllBy, findOneBy, addData, findDataBetweenDates };

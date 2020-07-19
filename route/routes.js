@@ -16,6 +16,10 @@ getByKey = (middleware) => {
   AbstractController.getByKey(middleware, assignResource(middleware));
 }
 
+getDataBetweenDates = (middleware) => {
+  AbstractController.getDataBetweenDates(middleware, assignResource(middleware));
+}
+
 readAll =  (middleware) => {  
   AbstractController.readAll(middleware, assignResource(middleware));
 }
@@ -105,5 +109,14 @@ router.get('/ocorrencia', readAll);
 router.post('/ocorrencia', create);
 router.put('/ocorrencia', update);
 router.delete('/ocorrencia/:id', remove);
+
+router.get('/valor/range/:inicio/:fim', getDataBetweenDates);
+router.get('/valor?*', getByKey);
+router.get('/valor/:id', read);
+router.get('/valor', readAll);
+router.post('/valor', create);
+router.put('/valor', update);
+router.delete('/valor/:id', remove);
+
 
 module.exports = router;

@@ -76,7 +76,7 @@ login = async (middleware, model) => {
         delete doc.senha;
         return middleware.res.status(200).send({ result: doc, token: token });
       }
-      return middleware.res.status(401);
+      return middleware.res.status(401).send('Invalid credentials');
     });
   }).catch(err => {
     return middleware.res.status(500).send(err.message);
@@ -119,7 +119,6 @@ getUserInfoByToken = async (middleware, model) => {
     if (!doc[0]) throw Error('User not found');
     return middleware.res.status(200).send(doc[0]);
   }).catch(err => {
-    console.log(err.message);
     return middleware.res.status(500).send(err.message);
   });
   
@@ -133,4 +132,12 @@ getByKey = async (middleware, model) => {
   });
 };
 
-module.exports = { create, read, readAll, update, remove, addData, register, login, validateAuth, getUserInfoByToken, getByKey };
+getDataBetweenDates = async (middleware, model) => {
+  AbstractService.findDataBetweenDates(model, middleware.params.inicio, middleware.params.fim).then((doc) => {
+    return middleware.res.status(200).send(doc);
+  }).catch(err => {
+    return middleware.res.status(500).send(err.message);
+  });
+};
+
+module.exports = { create, read, readAll, update, remove, addData, register, login, validateAuth, getUserInfoByToken, getByKey, getDataBetweenDates };
