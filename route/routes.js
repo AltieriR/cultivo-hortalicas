@@ -20,6 +20,10 @@ getDataBetweenDates = (middleware) => {
   AbstractController.getDataBetweenDates(middleware, assignResource(middleware));
 }
 
+generateRandomValues = (middleware) => {
+  AbstractController.generateRandomValues(middleware, assignResource(middleware));
+}
+
 readAll =  (middleware) => {  
   AbstractController.readAll(middleware, assignResource(middleware));
 }
@@ -118,5 +122,6 @@ router.post('/valor', create);
 router.put('/valor', update);
 router.delete('/valor/:id', remove);
 
+router.post('/valor/generate', generateRandomValues);
 
 module.exports = router;

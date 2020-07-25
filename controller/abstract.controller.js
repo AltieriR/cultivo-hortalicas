@@ -54,13 +54,24 @@ addData = async (middleware, model) => {
 };
 
 register = async (middleware, model) => {
-  await AbstractService.persist(model, middleware.body).then((doc) => {    
-    const token = auth.sign({ user: middleware.body.email });
-    delete doc.senha;
-    return middleware.res.status(200).send({ result: doc, token: token });
-  }).catch(err => {
-    return middleware.res.status(500).send(err.message);
+  let alreadyRegistered = false;
+  await AbstractService.findAllBy(model, {email: middleware.body.email}).then((doc) => {
+    if (doc[0]) {
+      alreadyRegistered = true;
+    }
   });
+  console.log(alreadyRegistered);
+  if (!alreadyRegistered) {
+    await AbstractService.persist(model, middleware.body).then((doc) => {
+      const token = auth.sign({ user: middleware.body.email });
+      console.log(middleware.body.email);
+      delete doc.senha;
+      return middleware.res.status(200).send({ result: doc, token: token });
+    }).catch(err => {
+      return middleware.res.status(500).send(err.message);
+    });
+  }
+  return middleware.res.status(409).send('User already existst');
 }
 
 login = async (middleware, model) => {
@@ -140,4 +151,32 @@ getDataBetweenDates = async (middleware, model) => {
   });
 };
 
-module.exports = { create, read, readAll, update, remove, addData, register, login, validateAuth, getUserInfoByToken, getByKey, getDataBetweenDates };
+randomDate = (start, end) => {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+randomValue = (min, max) => {
+  return Math.floor(min + Math.random() * (max - min + 1));
+}
+
+generateRandomValues = async (middleware, model) => {
+  let obj = middleware.body;
+  let error = null;
+  
+  for (let i = 0; i < 10; i++) {
+    obj.data = randomDate(new Date(2020, 1, 1), new Date());
+    obj.valor = randomValue(20, 28);
+    await AbstractService.persist(model, obj).catch(err => {
+      error = err;
+    });
+  }
+
+  if (!error) {
+    return middleware.res.sendStatus(200);
+  } else {
+    return middleware.res.status(500).send(error.message);
+  }
+
+};
+
+module.exports = { create, read, readAll, update, remove, addData, register, login, validateAuth, getUserInfoByToken, getByKey, getDataBetweenDates, generateRandomValues };
